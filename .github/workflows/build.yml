@@ -1,0 +1,75 @@
+name: Build
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+    inputs:
+      version:
+        description: Package version; defaults to the project version
+        type: string
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+      - name: Resolve package version
+        id: version
+        shell: pwsh
+        env:
+          REQUESTED_VERSION: ${{ inputs.version }}
+        run: |
+          $version = $env:REQUESTED_VERSION
+          if ([string]::IsNullOrWhiteSpace($version)) {
+            [xml]$project = Get-Content src/OpenForma/OpenForma.csproj -Raw
+            $version = [string]$project.Project.PropertyGroup.Version
+          }
+          if ($version -cnotmatch '^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-[0-9A-Za-z-]+(\.[0-9A-Za-z-]+)*)?$') {
+            throw "Expected a version such as 0.1.0 or 0.2.0-rc.1."
+          }
+          "value=$version" >> $env:GITHUB_OUTPUT
+      - name: Restore
+        run: dotnet restore OpenForma.slnx
+      - name: Build Release
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.value }}
+        run: dotnet build OpenForma.slnx -c Release --no-restore -p:Version="$PACKAGE_VERSION" -p:ContinuousIntegrationBuild=true
+      - name: Test
+        run: dotnet test OpenForma.slnx -c Release --no-build --no-restore --logger trx --results-directory artifacts/test-results
+      - name: Pack
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.value }}
+        run: dotnet pack src/OpenForma/OpenForma.csproj -c Release --no-build --no-restore -p:Version="$PACKAGE_VERSION" -p:ContinuousIntegrationBuild=true -o artifacts/packages
+      - name: Verify packaged client and server
+        env:
+          PACKAGE_VERSION: ${{ steps.version.outputs.value }}
+        run: |
+          for project in Pets.Client Pets.Server; do
+            dotnet restore "examples/$project" -p:UseOpenFormaPackage=true -p:OpenFormaVersion="$PACKAGE_VERSION" --source "$GITHUB_WORKSPACE/artifacts/packages" --packages "$GITHUB_WORKSPACE/artifacts/consumer-packages"
+            dotnet run --project "examples/$project" -c Release --no-restore -p:UseOpenFormaPackage=true -p:OpenFormaVersion="$PACKAGE_VERSION" -- --verify
+          done
+      - name: Upload NuGet package
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-package
+          path: artifacts/packages/*.nupkg
+          if-no-files-found: error
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: artifacts/test-results/*.trx

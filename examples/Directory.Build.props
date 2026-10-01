@@ -1,6 +1,7 @@
 <Project>
   <PropertyGroup>
     <UseOpenFormaPackage Condition="'$(UseOpenFormaPackage)' == ''">false</UseOpenFormaPackage>
+    <OpenFormaVersion Condition="'$(OpenFormaVersion)' == ''">0.1.0</OpenFormaVersion>
   </PropertyGroup>
   <ItemGroup Condition="'$(UseOpenFormaPackage)' != 'true'">
     <ProjectReference Include="$(MSBuildThisFileDirectory)../src/OpenForma/OpenForma.csproj"
@@ -9,6 +10,6 @@
                       GeneratePathProperty="true" ExcludeAssets="all" />
   </ItemGroup>
   <ItemGroup Condition="'$(UseOpenFormaPackage)' == 'true'">
-    <PackageReference Include="OpenForma" Version="0.1.0" PrivateAssets="all" />
+    <PackageReference Include="OpenForma" Version="$(OpenFormaVersion)" PrivateAssets="all" />
   </ItemGroup>
 </Project>

@@ -9,6 +9,13 @@
     <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
     <DevelopmentDependency>true</DevelopmentDependency>
     <Version>0.1.0</Version>
+    <PackageId>OpenForma</PackageId>
+    <Authors>Rickard Lundin</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/rilu/openforma</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/rilu/openforma</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>OpenAPI;Roslyn;SourceGenerator;HttpClient;ASP.NET Core</PackageTags>
     <Description>Compile-time OpenAPI models, HTTP clients, and abstract ASP.NET Core controllers for .NET.</Description>
     <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
