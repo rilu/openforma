@@ -1,14 +1,14 @@
 # OpenForma
 
 Compile-time C# models, typed HTTP clients, and abstract ASP.NET Core controllers from an OpenAPI JSON or YAML file.
-OpenForma.sln uses the .NET 10 SDK and contains OpenForma, OpenForma.Tests, and the Pets.Client/Pets.Server examples in the Examples solution folder.
+OpenForma.slnx uses the .NET 10 SDK and contains OpenForma, OpenForma.Tests, and the Pets.Client/Pets.Server examples in solution folders matching src, tests, and examples.
 The generator targets netstandard2.0 for compatibility with Roslyn compiler hosts; generated code is intended for .NET 10 consumers.
 
 ## Build, test, and package
 
     dotnet build
     dotnet test
-    dotnet pack OpenForma -c Release -o artifacts/packages
+    dotnet pack src/OpenForma -c Release -o artifacts/packages
 
 The package is local until you publish it to a NuGet feed. It contains the generator and YAML parser under
 analyzers/dotnet/cs, and MSBuild integration under buildTransitive. No runtime generator dependency is needed.
@@ -169,7 +169,7 @@ Their namespaces are OpenForma.Examples.Client and OpenForma.Examples.Server.
 
 Remove --verify to run the web server. To verify the packed NuGet instead of the project reference:
 
-    dotnet pack OpenForma -c Release -o artifacts/packages
+    dotnet pack src/OpenForma -c Release -o artifacts/packages
     dotnet restore examples/Pets.Server -p:UseOpenFormaPackage=true --source artifacts/packages --packages artifacts/nuget-openforma-example
     dotnet run --project examples/Pets.Server -p:UseOpenFormaPackage=true --no-restore -- --verify
 

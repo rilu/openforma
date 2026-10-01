@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="$(MSBuildThisFileDirectory)../src/OpenForma/buildTransitive/OpenForma.targets"
+          Condition="'$(UseOpenFormaPackage)' != 'true'" />
+  <ItemGroup Condition="'$(UseOpenFormaPackage)' != 'true'">
+    <Analyzer Include="$(PkgYamlDotNet)/lib/netstandard2.0/YamlDotNet.dll" />
+  </ItemGroup>
+</Project>

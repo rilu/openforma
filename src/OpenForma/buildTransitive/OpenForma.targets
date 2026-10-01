@@ -1,0 +1,9 @@
+<Project>
+  <ItemGroup>
+    <CompilerVisibleProperty Include="RootNamespace" />
+    <CompilerVisibleProperty Include="MSBuildProjectName" />
+    <CompilerVisibleProperty Include="OpenApiGenerationMode" />
+    <AdditionalFiles Include="@(OpenApiReference)" />
+  </ItemGroup>
+</Project>
+

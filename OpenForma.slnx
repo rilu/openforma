@@ -1,0 +1,17 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/examples/">
+    <Project Path="examples/Pets.Client/Pets.Client.csproj" />
+    <Project Path="examples/Pets.Server/Pets.Server.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/OpenForma/OpenForma.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/OpenForma.Tests/OpenForma.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+    <UseOpenFormaPackage Condition="'$(UseOpenFormaPackage)' == ''">false</UseOpenFormaPackage>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(UseOpenFormaPackage)' != 'true'">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)../src/OpenForma/OpenForma.csproj"
+                      OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
+    <PackageReference Include="YamlDotNet" Version="16.3.0" PrivateAssets="all"
+                      GeneratePathProperty="true" ExcludeAssets="all" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(UseOpenFormaPackage)' == 'true'">
+    <PackageReference Include="OpenForma" Version="0.1.0" PrivateAssets="all" />
+  </ItemGroup>
+</Project>
